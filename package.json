@@ -1,0 +1,54 @@
+{
+    "name": "flexjar-infoskjerm",
+    "version": "0.1.0",
+    "private": true,
+    "engines": {
+        "node": "20"
+    },
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "prettier:write": "prettier --write .",
+        "prettier:check": "prettier --check .",
+        "tsc": "tsc",
+        "lint": "eslint --ext=ts,tsx src",
+        "lint:fix": "eslint --ext=ts,tsx src --fix",
+        "format": "npm run prettier:write && npm run lint:fix"
+    },
+    "dependencies": {
+        "@google-cloud/bigquery": "^7.7.1",
+        "@navikt/aksel-icons": "^6.10.0",
+        "@navikt/ds-css": "^6.10.1",
+        "@navikt/ds-react": "^6.10.1",
+        "@navikt/ds-tailwind": "6.10.1",
+        "@navikt/ds-tokens": "^6.10.1",
+        "@navikt/next-logger": "^1.23.0",
+        "@navikt/oasis": "^3.3.0",
+        "@next/mdx": "^14.2.3",
+        "@types/node": "20.12.12",
+        "@types/react": "18.3.3",
+        "@types/react-dom": "18.3.0",
+        "autoprefixer": "10.4.19",
+        "dayjs": "^1.11.11",
+        "next": "14.2.3",
+        "next-mdx-remote": "^5.0.0",
+        "postcss": "8.4.38",
+        "react": "18.3.1",
+        "react-dom": "18.3.1",
+        "tailwindcss": "3.4.3",
+        "typescript": "5.4.5"
+    },
+    "devDependencies": {
+        "@navikt/eslint-config-teamsykmelding": "^5.2.0",
+        "eslint": "8.57.0",
+        "eslint-config-next": "14.2.3"
+    },
+    "eslintConfig": {
+        "extends": [
+            "@navikt/eslint-config-teamsykmelding",
+            "next/core-web-vitals"
+        ]
+    },
+    "prettier": "@navikt/eslint-config-teamsykmelding/prettier"
+}
