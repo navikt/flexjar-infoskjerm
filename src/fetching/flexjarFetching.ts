@@ -12,15 +12,11 @@ export async function hentFlexjarFeedbacks(): Promise<Feedback[]> {
             {
                 feedback: 'feedback',
                 svar: 'svar',
-                app: 'app',
-                feedbackId: 'feedbackId',
                 opprettet: '2024-01-01',
             },
             {
                 feedback: 'hei',
                 svar: '5',
-                app: 'app',
-                feedbackId: 'feedbackId',
                 opprettet: '2024-01-01',
             },
         ]
@@ -32,27 +28,28 @@ export async function hentFlexjarFeedbacks(): Promise<Feedback[]> {
             {
                 feedback: 'Klarte ikke hente feedbacks fra backend. error',
                 svar: '1',
-                app: 'app',
-                feedbackId: 'feedbackId',
                 opprettet: '2024-01-01',
             },
         ]
     }
-    return [
-        {
-            feedback: 'Klarte å hente token til bruk',
-            svar: '5',
-            app: 'app',
-            feedbackId: 'feedbackId',
-            opprettet: '2024-01-01',
+
+    const response = await fetch(`http://flexjar-backend/api/v1/infoskjerm`, {
+        headers: {
+            Authorization: `Bearer ${token.token}`,
         },
-    ]
+    })
+    const data = (await response.json()) as { feedback: Record<string, string>; opprettet: string }[]
+    return data.map((row) => {
+        return {
+            feedback: row.feedback.feedback,
+            svar: row.feedback.svar,
+            opprettet: row.opprettet,
+        }
+    })
 }
 
 export interface Feedback {
     feedback: string
     svar: string
-    app: string
-    feedbackId: string
     opprettet: string
 }
