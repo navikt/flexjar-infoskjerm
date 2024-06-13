@@ -38,7 +38,7 @@
         "typescript": "5.4.5"
     },
     "devDependencies": {
-        "@navikt/eslint-config-teamsykmelding": "^5.2.0",
+        "@navikt/eslint-config-teamsykmelding": "^6.2.0",
         "eslint": "8.57.0",
         "eslint-config-next": "14.2.3"
     },
