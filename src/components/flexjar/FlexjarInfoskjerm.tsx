@@ -38,6 +38,10 @@ export function FlexjarInfoskjerm({ feedbacks }: { feedbacks: Feedback[] }): Rea
     return (
         <>
             <div
+                onClick={() => {
+                    const randomFeedback = feedbacks[Math.floor(Math.random() * feedbacks.length)]
+                    setCurrentFeedback(randomFeedback)
+                }}
                 className={`w-100 max-w-90 flex h-screen flex-col justify-center align-middle ${styling.bakgrunn} py-10 px-10 text-center leading-none text-white`}
             >
                 {styling.emoji && <BodyShort className="text-8xl mb-10">{styling.emoji}</BodyShort>}
