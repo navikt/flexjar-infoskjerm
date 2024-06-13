@@ -3,7 +3,7 @@
 import React, { ReactElement, useEffect, useState } from 'react'
 import { BodyLong, BodyShort } from '@navikt/ds-react'
 
-import { Feedback } from '@/bigquery/flexjarFetching'
+import { Feedback } from '@/fetching/flexjarFetching'
 
 export function FlexjarInfoskjerm({ feedbacks }: { feedbacks: Feedback[] }): ReactElement {
     const [currentFeedback, setCurrentFeedback] = useState<Feedback>(feedbacks[0])
