@@ -22,7 +22,7 @@
         "@navikt/ds-react": "^6.13.0",
         "@navikt/ds-tailwind": "6.13.0",
         "@navikt/ds-tokens": "^6.10.1",
-        "@navikt/next-logger": "^1.23.0",
+        "@navikt/next-logger": "^1.25.0",
         "@next/mdx": "^14.2.5",
         "@types/node": "20.14.10",
         "@types/react": "18.3.3",
