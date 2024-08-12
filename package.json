@@ -20,7 +20,7 @@
         "@navikt/aksel-icons": "^6.10.0",
         "@navikt/ds-css": "^6.13.0",
         "@navikt/ds-react": "^6.13.0",
-        "@navikt/ds-tailwind": "6.13.0",
+        "@navikt/ds-tailwind": "6.15.0",
         "@navikt/ds-tokens": "^6.10.1",
         "@navikt/next-logger": "^1.23.0",
         "@next/mdx": "^14.2.5",
