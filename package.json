@@ -30,7 +30,7 @@
         "autoprefixer": "10.4.20",
         "dayjs": "^1.11.12",
         "jose": "^5.9.3",
-        "next": "14.2.15",
+        "next": "14.2.16",
         "openid-client": "^5.7.0",
         "postcss": "8.4.47",
         "react": "18.3.1",
