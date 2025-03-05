@@ -21,7 +21,7 @@
         "@navikt/ds-css": "^7.14.3",
         "@navikt/ds-react": "^7.14.3",
         "@navikt/ds-tailwind": "7.14.3",
-        "@navikt/ds-tokens": "^7.14.1",
+        "@navikt/ds-tokens": "^7.16.0",
         "@navikt/next-logger": "^1.35.0",
         "@next/mdx": "^14.2.15",
         "@types/node": "20.14.10",
