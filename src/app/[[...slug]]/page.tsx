@@ -1,10 +1,11 @@
-import { ReactElement } from 'react'
+import {ReactElement} from 'react'
 
-import { FlexjarInfoskjerm } from '@/components/flexjar/FlexjarInfoskjerm'
-import { hentFlexjarFeedbacks } from '@/fetching/flexjarFetching'
+
+import {hentFlexjarFeedbacks} from '@/fetching/flexjarFetching'
+import {Infoskjerm} from '@/components/Infoskjerm'
 
 export default async function Docs(): Promise<ReactElement> {
-    const list = await hentFlexjarFeedbacks()
+    const flexjarFeedbacks = await hentFlexjarFeedbacks()
 
-    return <FlexjarInfoskjerm feedbacks={list} />
+    return <Infoskjerm feedbacks={flexjarFeedbacks}/>
 }
