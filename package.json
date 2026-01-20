@@ -19,7 +19,7 @@
     "dependencies": {
         "@navikt/aksel-icons": "^7.37.0",
         "@navikt/ds-css": "^7.36.0",
-        "@navikt/ds-react": "^7.38.0",
+        "@navikt/ds-react": "^8.0.1",
         "@navikt/ds-tailwind": "7.38.0",
         "@navikt/ds-tokens": "^7.37.0",
         "@navikt/next-logger": "^4.4.5",
