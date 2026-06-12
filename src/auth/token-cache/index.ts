@@ -14,11 +14,8 @@ let cache: SieveCache
 
 function getCache(): SieveCache {
     if (!cache) {
-        const averageJwtSize = 1024 // bytes
-        const maxCacheSize = 128 /* MB */ * 1024 /* KB */ * 1024 /* bytes */
-        const maxCacheCapacity = Math.floor(maxCacheSize / averageJwtSize)
-
-        cache = new SieveCache(maxCacheCapacity)
+        // Appen har i praksis bare ett fåtall scopes, så en liten cache er nok.
+        cache = new SieveCache(10)
     }
     return cache
 }
@@ -44,7 +41,7 @@ export const withCache = (oboProvider: ClientCredientialsProvider): ClientCredie
             if (result.ok) {
                 const ttl = getSecondsToExpire(decodeJwt(result.token))
                 if (ttl > 0) {
-                    cache.set(key, result.token, ttl)
+                    cache.set(key, result.token, ttl * 1000)
                 }
             }
 
