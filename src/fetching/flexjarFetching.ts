@@ -30,6 +30,7 @@ export async function hentFlexjarFeedbacks(): Promise<Feedback[]> {
     }
 
     const response = await fetch(`http://flexjar-backend/api/v1/infoskjerm`, {
+        next: { revalidate: 300 },
         headers: {
             Authorization: `Bearer ${token.token}`,
         },

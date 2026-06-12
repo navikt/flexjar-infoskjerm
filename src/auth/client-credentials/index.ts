@@ -2,7 +2,7 @@ import { Issuer } from 'openid-client'
 
 import { withCache } from '../token-cache'
 
-export type ClientCredientialsProvider = (scope: string) => Promise<ClientCredentialsResult>
+export type ClientCredentialsProvider = (scope: string) => Promise<ClientCredentialsResult>
 
 export type ClientCredentialsResult = { ok: true; token: string } | { ok: false; error: Error }
 
@@ -31,7 +31,7 @@ export const ClientCredentialsResult = {
  *
  * @param audience The target app you request a token for.
  */
-export const requestAzureClientCredentialsToken: ClientCredientialsProvider = withCache(async (scope) =>
+export const requestAzureClientCredentialsToken: ClientCredentialsProvider = withCache(async (scope) =>
     grantClientCredentialsToken({
         issuer: process.env.AZURE_OPENID_CONFIG_ISSUER!,
         token_endpoint: process.env.AZURE_OPENID_CONFIG_TOKEN_ENDPOINT!,
