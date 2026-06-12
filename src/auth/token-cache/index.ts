@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto'
 
 import { decodeJwt, JWTPayload } from 'jose'
 
-import { ClientCredentialsResult, ClientCredientialsProvider } from '../client-credentials'
+import { ClientCredentialsResult, ClientCredentialsProvider } from '../client-credentials'
 
 import SieveCache from './cache'
 
@@ -28,7 +28,7 @@ function getSecondsToExpire(payload: JWTPayload): number {
     return payload.exp ? secondsUntil(payload.exp) : 0
 }
 
-export const withCache = (oboProvider: ClientCredientialsProvider): ClientCredientialsProvider => {
+export const withCache = (oboProvider: ClientCredentialsProvider): ClientCredentialsProvider => {
     return async (audience: string) => {
         const cache = getCache()
         const key = sha256(audience)

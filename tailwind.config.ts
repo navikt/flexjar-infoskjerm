@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+import type { Config } from 'tailwindcss'
+import naviktTailwindPreset from '@navikt/ds-tailwind'
 
-const naviktTailwindPreset = require('@navikt/ds-tailwind')
-
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+const config: Config = {
     presets: [naviktTailwindPreset],
     content: ['./src/**/*.{js,ts,jsx,tsx}'],
     theme: {
@@ -11,3 +9,5 @@ module.exports = {
     },
     plugins: [],
 }
+
+export default config
