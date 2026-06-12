@@ -1,10 +1,7 @@
 import { logger } from '@navikt/next-logger'
-import getConfig from 'next/config'
 
 import { requestAzureClientCredentialsToken } from '@/auth/client-credentials'
 import { isLocalOrDemo } from '@/utlis/env'
-
-const { serverRuntimeConfig } = getConfig()
 
 export async function hentFlexjarFeedbacks(): Promise<Feedback[]> {
     if (isLocalOrDemo) {
@@ -21,16 +18,15 @@ export async function hentFlexjarFeedbacks(): Promise<Feedback[]> {
             },
         ]
     }
-    const token = await requestAzureClientCredentialsToken(serverRuntimeConfig.flexjarBackendClientId)
+    const flexjarBackendClientId = process.env.FLEXJAR_BACKEND_CLIENT_ID
+    if (!flexjarBackendClientId) {
+        logger.error('Mangler FLEXJAR_BACKEND_CLIENT_ID')
+        return []
+    }
+    const token = await requestAzureClientCredentialsToken(flexjarBackendClientId)
     if (!token.ok) {
         logger.error('Kunne ikke hente token: ' + token.error)
-        return [
-            {
-                feedback: 'Klarte ikke hente feedbacks fra backend. error',
-                svar: '1',
-                opprettet: '2024-01-01',
-            },
-        ]
+        return []
     }
 
     const response = await fetch(`http://flexjar-backend/api/v1/infoskjerm`, {
@@ -38,6 +34,10 @@ export async function hentFlexjarFeedbacks(): Promise<Feedback[]> {
             Authorization: `Bearer ${token.token}`,
         },
     })
+    if (!response.ok) {
+        logger.error(`Backend svarte med ${response.status} ${response.statusText}`)
+        return []
+    }
     const data = (await response.json()) as { feedback: Record<string, string>; opprettet: string }[]
     return data.map((row) => {
         return {
