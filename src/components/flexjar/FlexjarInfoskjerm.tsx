@@ -1,12 +1,22 @@
 'use client'
 
 import React, { ReactElement, useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { BodyLong, BodyShort } from '@navikt/ds-react'
 
 import { Feedback } from '@/fetching/flexjarFetching'
 
+const REFRESH_INTERVAL_MS = 5 * 60 * 1000
+
 export function FlexjarInfoskjerm({ feedbacks }: { feedbacks: Feedback[] }): ReactElement {
+    const router = useRouter()
     const [currentFeedback, setCurrentFeedback] = useState<Feedback>(feedbacks[0])
+
+    // Henter ny data fra serveren hvert 5. minutt uten full page reload
+    useEffect(() => {
+        const interval = setInterval(() => router.refresh(), REFRESH_INTERVAL_MS)
+        return () => clearInterval(interval)
+    }, [router])
 
     useEffect(() => {
         if (feedbacks.length > 0) {
