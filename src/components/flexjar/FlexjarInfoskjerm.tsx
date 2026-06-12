@@ -7,10 +7,17 @@ import { BodyLong, BodyShort } from '@navikt/ds-react'
 import { Feedback } from '@/fetching/flexjarFetching'
 
 const REFRESH_INTERVAL_MS = 5 * 60 * 1000
+const FEEDBACK_MODUS_MS = 5 * 60 * 1000
+const DASHBOARD_MODUS_MS = 2 * 60 * 1000
+const METABASE_DASHBOARD_URL =
+    'https://metabase.ansatt.nav.no/public/dashboard/c21e4a98-4678-4872-a976-c9be01fabf29?dato=past1months~&gruppering=day'
+
+type Modus = 'feedbacks' | 'dashboard'
 
 export function FlexjarInfoskjerm({ feedbacks }: { feedbacks: Feedback[] }): ReactElement {
     const router = useRouter()
     const [currentFeedback, setCurrentFeedback] = useState<Feedback>(feedbacks[0])
+    const [modus, setModus] = useState<Modus>('feedbacks')
 
     // Henter ny data fra serveren hvert 5. minutt uten full page reload
     useEffect(() => {
@@ -18,27 +25,48 @@ export function FlexjarInfoskjerm({ feedbacks }: { feedbacks: Feedback[] }): Rea
         return () => clearInterval(interval)
     }, [router])
 
+    // Bytter modus mellom feedbacks (5 min) og dashboard (2 min)
     useEffect(() => {
-        if (feedbacks.length > 0) {
-            const interval = setInterval(() => {
-                const randomFeedback = feedbacks[Math.floor(Math.random() * feedbacks.length)]
-                setCurrentFeedback(randomFeedback)
-            }, 60000)
-            return () => clearInterval(interval)
-        }
-    }, [feedbacks])
+        const varighet = modus === 'feedbacks' ? FEEDBACK_MODUS_MS : DASHBOARD_MODUS_MS
+        const timer = setTimeout(() => {
+            setModus(modus === 'feedbacks' ? 'dashboard' : 'feedbacks')
+        }, varighet)
+        return () => clearTimeout(timer)
+    }, [modus])
 
     useEffect(() => {
+        if (modus !== 'feedbacks' || feedbacks.length === 0) return
+        const interval = setInterval(() => {
+            const randomFeedback = feedbacks[Math.floor(Math.random() * feedbacks.length)]
+            setCurrentFeedback(randomFeedback)
+        }, 60000)
+        return () => clearInterval(interval)
+    }, [feedbacks, modus])
+
+    useEffect(() => {
+        if (modus !== 'feedbacks') return
         const handleKeyDown = (): void => {
             const randomFeedback = feedbacks[Math.floor(Math.random() * feedbacks.length)]
             setCurrentFeedback(randomFeedback)
         }
-
         window.addEventListener('keydown', handleKeyDown)
         return () => {
             window.removeEventListener('keydown', handleKeyDown)
         }
-    }, [feedbacks])
+    }, [feedbacks, modus])
+
+    if (modus === 'dashboard') {
+        return (
+            <div onClick={() => setModus('feedbacks')} className="cursor-pointer">
+                <iframe
+                    src={METABASE_DASHBOARD_URL}
+                    className="h-screen w-full border-0 pointer-events-none"
+                    title="Metabase-dashboard"
+                />
+            </div>
+        )
+    }
+
     if (!currentFeedback) {
         return <div>Det er ingen tilbakemeldinger</div>
     }
@@ -48,11 +76,8 @@ export function FlexjarInfoskjerm({ feedbacks }: { feedbacks: Feedback[] }): Rea
     return (
         <>
             <div
-                onClick={() => {
-                    const randomFeedback = feedbacks[Math.floor(Math.random() * feedbacks.length)]
-                    setCurrentFeedback(randomFeedback)
-                }}
-                className={`w-100 max-w-90 flex h-screen flex-col justify-center align-middle ${styling.bakgrunn} py-10 px-10 text-center leading-none text-white`}
+                onClick={() => setModus('dashboard')}
+                className={`w-100 max-w-90 flex h-screen flex-col justify-center align-middle ${styling.bakgrunn} py-10 px-10 text-center leading-none text-white cursor-pointer`}
             >
                 {styling.emoji && <BodyShort className="text-8xl mb-10">{styling.emoji}</BodyShort>}
                 <BodyLong style={{ lineHeight: '1.5' }} className={calculateFontSize(currentFeedback)}>
