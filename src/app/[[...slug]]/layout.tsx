@@ -3,7 +3,7 @@ import { ReactElement } from 'react'
 
 export default async function RootLayout({ children }: { children: React.ReactNode }): Promise<ReactElement> {
     return (
-        <html lang="en">
+        <html lang="nb">
             <head>
                 <title>Flexjar infoskjerm</title>
                 <meta name="robots" content="noindex" />
