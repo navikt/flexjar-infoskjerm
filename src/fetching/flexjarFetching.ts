@@ -1,6 +1,6 @@
 import { logger } from '@navikt/next-logger'
-
 import { requestAzureClientCredentialsToken } from '@navikt/oasis'
+
 import { isLocalOrDemo } from '@/utils/env'
 
 export async function hentFlexjarFeedbacks(): Promise<Feedback[]> {
