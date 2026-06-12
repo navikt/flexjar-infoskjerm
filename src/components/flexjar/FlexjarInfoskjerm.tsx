@@ -56,7 +56,15 @@ export function FlexjarInfoskjerm({ feedbacks }: { feedbacks: Feedback[] }): Rea
     }, [feedbacks, modus])
 
     if (modus === 'dashboard') {
-        return <iframe src={METABASE_DASHBOARD_URL} className="h-screen w-full border-0" title="Metabase-dashboard" />
+        return (
+            <div onClick={() => setModus('feedbacks')} className="cursor-pointer">
+                <iframe
+                    src={METABASE_DASHBOARD_URL}
+                    className="h-screen w-full border-0 pointer-events-none"
+                    title="Metabase-dashboard"
+                />
+            </div>
+        )
     }
 
     if (!currentFeedback) {
@@ -68,11 +76,8 @@ export function FlexjarInfoskjerm({ feedbacks }: { feedbacks: Feedback[] }): Rea
     return (
         <>
             <div
-                onClick={() => {
-                    const randomFeedback = feedbacks[Math.floor(Math.random() * feedbacks.length)]
-                    setCurrentFeedback(randomFeedback)
-                }}
-                className={`w-100 max-w-90 flex h-screen flex-col justify-center align-middle ${styling.bakgrunn} py-10 px-10 text-center leading-none text-white`}
+                onClick={() => setModus('dashboard')}
+                className={`w-100 max-w-90 flex h-screen flex-col justify-center align-middle ${styling.bakgrunn} py-10 px-10 text-center leading-none text-white cursor-pointer`}
             >
                 {styling.emoji && <BodyShort className="text-8xl mb-10">{styling.emoji}</BodyShort>}
                 <BodyLong style={{ lineHeight: '1.5' }} className={calculateFontSize(currentFeedback)}>
