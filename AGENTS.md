@@ -21,10 +21,10 @@ npm run format && npm run build
 - App Router: `src/app/` (layout, page, API-ruter)
 - UI-komponenter: `src/components/`
 - Server-side datahenting: `src/fetching/`
-- Auth (Azure client_credentials): `src/auth/`
 - Hjelpefunksjoner: `src/utlis/`
 - Nais-konfigurasjon: `nais/app/`
 
+Auth via `@navikt/oasis`
 Appen har én server-side page som henter feedbacks og sender til en klient-komponent som roterer visningen.
 
 ## 3) Kodestil
