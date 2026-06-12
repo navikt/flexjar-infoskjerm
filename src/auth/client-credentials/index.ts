@@ -1,5 +1,3 @@
-import { Issuer } from 'openid-client'
-
 import { withCache } from '../token-cache'
 
 export type ClientCredentialsProvider = (scope: string) => Promise<ClientCredentialsResult>
@@ -17,7 +15,7 @@ export const ClientCredentialsResult = {
             token,
             toString: (): void => {
                 throw Error(
-                    "OboResult object can not be used as a string. If you tried to get the token, access the 'token' property.",
+                    "ClientCredentialsResult object can not be used as a string. If you tried to get the token, access the 'token' property.",
                 )
             },
         } as const
@@ -29,39 +27,42 @@ export const ClientCredentialsResult = {
  * Requests client credentials token from Azure. Requires Azure to be enabled in
  * nais application manifest.
  *
- * @param audience The target app you request a token for.
+ * @param scope The target app you request a token for.
  */
-export const requestAzureClientCredentialsToken: ClientCredentialsProvider = withCache(async (scope) =>
-    grantClientCredentialsToken({
-        issuer: process.env.AZURE_OPENID_CONFIG_ISSUER!,
-        token_endpoint: process.env.AZURE_OPENID_CONFIG_TOKEN_ENDPOINT!,
-        client_id: process.env.AZURE_APP_CLIENT_ID!,
-        client_secret: process.env.AZURE_APP_CLIENT_SECRET!,
-        scope: scope,
-    }),
+export const requestAzureClientCredentialsToken: ClientCredentialsProvider = withCache(
+    async (scope): Promise<ClientCredentialsResult> => {
+        const tokenEndpoint = process.env.AZURE_OPENID_CONFIG_TOKEN_ENDPOINT
+        const clientId = process.env.AZURE_APP_CLIENT_ID
+        const clientSecret = process.env.AZURE_APP_CLIENT_SECRET
+
+        if (!tokenEndpoint || !clientId || !clientSecret) {
+            return ClientCredentialsResult.Error('Mangler Azure-konfigurasjon (token endpoint, client id eller secret)')
+        }
+
+        try {
+            const response = await fetch(tokenEndpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    grant_type: 'client_credentials',
+                    client_id: clientId,
+                    client_secret: clientSecret,
+                    scope,
+                }),
+            })
+
+            if (!response.ok) {
+                return ClientCredentialsResult.Error(
+                    `Token-endepunkt svarte med ${response.status} ${response.statusText}`,
+                )
+            }
+
+            const data = (await response.json()) as { access_token?: string }
+            return data.access_token
+                ? ClientCredentialsResult.Ok(data.access_token)
+                : ClientCredentialsResult.Error('Token-respons mangler access_token')
+        } catch (e) {
+            return ClientCredentialsResult.Error(e as Error)
+        }
+    },
 )
-
-const grantClientCredentialsToken: (opts: {
-    issuer: string
-    token_endpoint: string
-    client_id: string
-    client_secret: string
-    scope: string
-}) => Promise<ClientCredentialsResult> = async ({ issuer, token_endpoint, client_id, client_secret, scope }) => {
-    try {
-        const { access_token } = await new new Issuer({
-            issuer,
-            token_endpoint,
-            token_endpoint_auth_signing_alg_values_supported: ['RS256'],
-        }).Client({ client_id, client_secret, token_endpoint_auth_method: 'client_secret_post' }).grant({
-            grant_type: 'client_credentials',
-            scope,
-        })
-
-        return access_token
-            ? ClientCredentialsResult.Ok(access_token)
-            : ClientCredentialsResult.Error(Error('TokenSet does not contain an access_token'))
-    } catch (e) {
-        return ClientCredentialsResult.Error(e as Error)
-    }
-}
