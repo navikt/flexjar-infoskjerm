@@ -39,7 +39,7 @@
     "devDependencies": {
         "@navikt/eslint-config-teamsykmelding": "^8.1.4",
         "eslint": "8.57.1",
-        "eslint-config-next": "15.5.18"
+        "eslint-config-next": "16.3.3"
     },
     "eslintConfig": {
         "extends": [
